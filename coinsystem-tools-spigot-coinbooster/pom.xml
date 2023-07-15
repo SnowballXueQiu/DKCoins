@@ -16,13 +16,14 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
-                <version>3.6.1</version>
-                <configuration>
-                    <source>8</source>
-                    <target>8</target>
-                </configuration>
+            </plugin>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-shade-plugin</artifactId>
             </plugin>
         </plugins>
+
         <resources>
             <resource>
                 <directory>src/main/resources</directory>
@@ -44,16 +45,16 @@
             <artifactId>coinsystem-core</artifactId>
             <version>3.2.1</version>
         </dependency>
+
         <dependency>
             <groupId>ch.dkrieger.coinsystem</groupId>
             <artifactId>coinsystem-spigot</artifactId>
             <version>3.2.1</version>
         </dependency>
+
         <dependency>
-            <groupId>org.bukkit</groupId>
-            <artifactId>bukkit</artifactId>
-            <version>1.8-R0.1-SNAPSHOT</version>
-            <scope>provided</scope>
+            <groupId>org.spigotmc</groupId>
+            <artifactId>spigot</artifactId>
         </dependency>
     </dependencies>
 

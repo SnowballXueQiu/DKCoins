@@ -5,7 +5,6 @@ import ch.dkrieger.coinsystem.core.manager.MessageManager;
 import ch.dkrieger.coinsystem.core.manager.PermissionManager;
 import ch.dkrieger.coinsystem.core.player.CoinPlayer;
 import ch.dkrieger.coinsystem.spigot.SpigotCoinSystemBootstrap;
-import net.md_5.bungee.api.chat.BaseComponent;
 import org.bukkit.Bukkit;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -17,40 +16,29 @@ public class PlayerListener implements Listener{
 
 	@EventHandler
 	public void onLogin(final PlayerLoginEvent event){
-		Bukkit.getScheduler().runTaskAsynchronously(SpigotCoinSystemBootstrap.getInstance(), ()->{
-			if(!CoinSystem.getInstance().getStorage().isConnected()){
-				if(event.getPlayer().hasPermission(PermissionManager.getInstance().admin)){
+		Bukkit.getScheduler().runTaskAsynchronously(SpigotCoinSystemBootstrap.getInstance(), () -> {
+			if (!CoinSystem.getInstance().getStorage().isConnected()) {
+				if (event.getPlayer().hasPermission(PermissionManager.getInstance().admin)) {
 					event.getPlayer().sendMessage(MessageManager.getInstance().mysql_noconnection);
 				}
 				return;
 			}
-			if(CoinSystem.getInstance().getConfig().system_player_onlyproxy_check) return;
+			if (CoinSystem.getInstance().getConfig().system_player_onlyproxy_check) return;
 			CoinPlayer player = null;
 			try {
-				try{
+				try {
 					player = CoinSystem.getInstance().getPlayerManager().getPlayerSave(event.getPlayer().getUniqueId());
-				}catch (Exception ignored){}
+				} catch (Exception ignored) {
+				}
 				player = CoinSystem.getInstance().getPlayerManager().getPlayerSave(event.getPlayer().getUniqueId());
-			}catch (Exception exception){
-				event.disallow(PlayerLoginEvent.Result.KICK_BANNED,"§cError");
+			} catch (Exception exception) {
+				event.disallow(PlayerLoginEvent.Result.KICK_BANNED, "§cError");
 				exception.printStackTrace();
 			}
-			if(player == null) CoinSystem.getInstance().getPlayerManager().createPlayer(event.getPlayer().getName(),event.getPlayer().getUniqueId());
-			else player.updateInfos(event.getPlayer().getName(),CoinSystem.getInstance().getPlatform().getColor(player)
-					,System.currentTimeMillis());
-
-			if(event.getPlayer().hasPermission("dkbans.admin")) {
-				if(CoinSystem.getInstance().getUpdateChecker().hasNewVersion()){
-					event.getPlayer().sendMessage(MessageManager.getInstance().prefix + "§7New version available §e" + CoinSystem.getInstance().getUpdateChecker().getLatestVersionString());
-				}
-				BaseComponent[] messages = CoinSystem.getInstance().getUpdateChecker().getEndOfLifeMessage();
-				if(messages != null){
-					event.getPlayer().sendMessage(MessageManager.getInstance().prefix+" §7------------------------");
-					for (BaseComponent message : messages) {
-						event.getPlayer().sendMessage(message.toLegacyText());
-					}
-					event.getPlayer().sendMessage(MessageManager.getInstance().prefix+" §7------------------------");
-				}
+			if (player == null) {
+				CoinSystem.getInstance().getPlayerManager().createPlayer(event.getPlayer().getName(), event.getPlayer().getUniqueId());
+			} else {
+				player.updateInfos(event.getPlayer().getName(), CoinSystem.getInstance().getPlatform().getColor(player), System.currentTimeMillis());
 			}
 		});
 	}

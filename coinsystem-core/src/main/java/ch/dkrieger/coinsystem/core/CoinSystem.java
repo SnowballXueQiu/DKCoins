@@ -15,7 +15,6 @@ import ch.dkrieger.coinsystem.core.storage.storage.json.JsonCoinStorage;
 import ch.dkrieger.coinsystem.core.storage.storage.mongodb.MongoDBCoinStorage;
 import ch.dkrieger.coinsystem.core.storage.storage.sql.mysql.MySQLCoinStorage;
 import ch.dkrieger.coinsystem.core.storage.storage.sql.sqlite.SQLiteCoinStorage;
-import ch.dkrieger.coinsystem.core.utils.UpdateChecker;
 
 import java.net.MalformedURLException;
 
@@ -27,7 +26,6 @@ public class CoinSystem {
     private CoinPlayerManager playerManager;
     private CoinStorage storage;
     private Config config;
-    private UpdateChecker updateChecker;
 
     public CoinSystem(DKCoinsPlatform platform) {
         INSTANCE = this;
@@ -37,15 +35,6 @@ public class CoinSystem {
         new MessageManager("DKCoins");
         System.out.println("["+MessageManager.getInstance().system_name+"] plugin is starting");
         System.out.println("["+MessageManager.getInstance().system_name+"] CoinSystem v"+this.version+" by Davide Wietlisbach");
-
-        try {
-            this.updateChecker = new UpdateChecker(39159);
-            if(this.updateChecker.hasNewVersion()) {
-                System.out.println(MessageManager.getInstance().system_prefix + "New version available: " + this.updateChecker.getLatestVersionString());
-            }
-        } catch (MalformedURLException ignored) {
-            System.out.println(MessageManager.getInstance().system_prefix + "Can't check newest version.");
-        }
 
         systemBootstrap();
 
@@ -110,10 +99,6 @@ public class CoinSystem {
 
     public Config getConfig() {
         return config;
-    }
-
-    public UpdateChecker getUpdateChecker() {
-        return updateChecker;
     }
 
     public static CoinSystem getInstance() {

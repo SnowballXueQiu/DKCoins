@@ -45,23 +45,4 @@ public class PlayerListener implements Listener{
 					,System.currentTimeMillis());
 		});
 	}
-
-	@EventHandler
-	public void onPostLogin(PostLoginEvent event) {
-		ProxyServer.getInstance().getScheduler().runAsync(BungeeCordCoinSystemBootstrap.getInstance(), ()-> {
-			if(event.getPlayer().hasPermission("dkbans.admin")) {
-				if(CoinSystem.getInstance().getUpdateChecker().hasNewVersion()){
-					event.getPlayer().sendMessage(TextComponent.fromLegacyText(MessageManager.getInstance().prefix + "§7New version available §e" + CoinSystem.getInstance().getUpdateChecker().getLatestVersionString()));
-				}
-				BaseComponent[] messages = CoinSystem.getInstance().getUpdateChecker().getEndOfLifeMessage();
-				if(messages != null){
-					event.getPlayer().sendMessage(MessageManager.getInstance().prefix+" §7------------------------");
-					for (BaseComponent message : messages) {
-						event.getPlayer().sendMessage(message);
-					}
-					event.getPlayer().sendMessage(MessageManager.getInstance().prefix+" §7------------------------");
-				}
-			}
-		});
-	}
 }
